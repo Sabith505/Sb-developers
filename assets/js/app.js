@@ -1146,12 +1146,16 @@ function initPageLoader() {
 
 function checkOrderCompleteCallback() {
   const urlParams = new URLSearchParams(window.location.search);
+
+  // If this is FiveM login return, NEVER show order complete!
+  if (urlParams.get('cfx_auth_success') === '1' || urlParams.has('cfx_auth_success')) {
+    return;
+  }
+
+  // Strictly trigger only on real Tebex checkout completion!
   const isComplete = urlParams.get('checkout') === 'complete' || 
-                     urlParams.get('success') === '1' || 
-                     urlParams.get('success') === 'true' || 
                      urlParams.get('order_complete') === '1' || 
-                     urlParams.get('test_order') === '1' ||
-                     urlParams.has('payment_status');
+                     urlParams.get('payment') === 'complete';
 
   if (isComplete) {
     state.cart = [];
@@ -1165,7 +1169,6 @@ function checkOrderCompleteCallback() {
     if (orderNum) {
       const orderId = urlParams.get('order_id') || 
                       urlParams.get('txn_id') || 
-                      urlParams.get('basket') || 
                       'tbx-' + Math.random().toString(36).substring(2, 10) + '-' + Date.now().toString(36);
       orderNum.textContent = orderId;
     }
