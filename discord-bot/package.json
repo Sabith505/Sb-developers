@@ -1,0 +1,21 @@
+{
+  "name": "sb-developers-discord-bot",
+  "version": "1.0.0",
+  "description": "Official Discord Bot for SB Developers - Customer Verification, Role Sync & Store Integration",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.16.3",
+    "dotenv": "^16.4.5"
+  },
+  "keywords": [
+    "fivem",
+    "discord-bot",
+    "tebex",
+    "sb-developers"
+  ],
+  "author": "SB Developers",
+  "license": "MIT"
+}

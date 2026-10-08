@@ -1,0 +1,13 @@
+SB Developers Tebex Checkout - Setup
+
+Netlify Environment Variables (Functions scope):
+- TEBEX_PROJECT_ID = your Tebex project ID
+- TEBEX_PRIVATE_KEY = your Tebex private key (kept server-side; this Headless checkout does not need it)
+- TEBEX_PUBLIC_TOKEN = your Tebex Public Token (REQUIRED by netlify/functions/tebex-checkout.mjs)
+
+After changing environment variables, create a new production deploy.
+The storefront uses Tebex Headless API to create a basket and redirects to basket.links.checkout.
+
+Discord OAuth redirect used by the storefront:
+https://sbdevelopers.netlify.app/
+Register that exact URI in your Discord Developer Portal OAuth2 Redirects.
