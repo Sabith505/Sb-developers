@@ -64,33 +64,34 @@ function initHeroTitleTypewriter() {
 
 function triggerDiscordOAuth() {
   const clientId = "1552667254502592622";
-  const guildInvite = "https://discord.gg/JPfmWeqMMC";
-  const redirectUri = "https://sbdevelopers.netlify.app/";
-  const oauthUrl = `https://discord.com/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=identify%20guilds%20guilds.join`;
-
-  // Always open server invite so user joins the server
-  window.open(guildInvite, '_blank');
-
-  // If running on live domain
-  if (window.location.protocol.startsWith('http') && !window.location.hostname.includes('localhost')) {
-    window.location.href = oauthUrl;
-    return;
+  
+  // Use Vercel domain as primary redirect URI
+  let redirectUri = "https://sbdevelopers-six.vercel.app/";
+  if (typeof window !== 'undefined' && window.location.protocol.startsWith('http') && !window.location.hostname.includes('localhost')) {
+    redirectUri = window.location.origin + window.location.pathname.replace(/\/index\.html$/i, '').replace(/\/$/, '') + '/';
   }
 
-  // Local testing (file:// or localhost)
-  window.open(oauthUrl, '_blank');
-  const demoUser = {
-    discordConnected: true,
-    id: "1478812501079490641",
-    username: "SB_Customer",
-    displayName: "SB Customer",
-    avatarUrl: "https://cdn.discordapp.com/embed/avatars/0.png",
-    verified: true
-  };
-  saveUserAuth(demoUser);
-  updateAuthUI();
-  updateCartUI();
-  showToast("Discord connected & joined server!", "✓");
+  const oauthUrl = `https://discord.com/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=identify%20guilds%20guilds.join`;
+
+  // Only open ONE tab / redirect cleanly to the bot authorization
+  if (window.location.protocol.startsWith('http') && !window.location.hostname.includes('localhost')) {
+    window.location.href = oauthUrl;
+  } else {
+    // Local testing
+    window.open(oauthUrl, '_blank');
+    const demoUser = {
+      discordConnected: true,
+      id: "1478812501079490641",
+      username: "SB_Customer",
+      displayName: "SB Customer",
+      avatarUrl: "https://cdn.discordapp.com/embed/avatars/0.png",
+      verified: true
+    };
+    saveUserAuth(demoUser);
+    updateAuthUI();
+    updateCartUI();
+    showToast("Discord connected & server joined via Bot!", "✓");
+  }
 }
 
 /**
@@ -1098,10 +1099,10 @@ async function checkCfxAuthCallback() {
 // direct Headless Tebex API, then redirect the customer to Tebex's hosted payment checkout.
 
 function getSafeOrigin() {
-  if (typeof window === 'undefined') return "https://sbdevelopers.netlify.app";
+  if (typeof window === 'undefined') return "https://sbdevelopers-six.vercel.app";
   const proto = window.location.protocol;
   if (proto === 'file:' || !window.location.origin || window.location.origin === 'null') {
-    return "https://sbdevelopers.netlify.app";
+    return "https://sbdevelopers-six.vercel.app";
   }
   // Supports GitHub Pages (e.g. username.github.io/repository), custom domains, and Netlify
   const cleanPath = window.location.pathname.replace(/\/index\.html$/i, '').replace(/\/$/, '');
